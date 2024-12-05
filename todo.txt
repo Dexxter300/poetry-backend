@@ -1,0 +1,4 @@
+1. test admin router 
+2. rewrite poetry model 
+3. add joi schemas to every model
+4. polish every controller
