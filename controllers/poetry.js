@@ -12,6 +12,23 @@ cloudinary.config({
   api_secret: CLOUDINARY_SECRET,
 });
 
+// const apiSecret = cloudinary.config().api_secret;
+
+// Server-side function used to sign an upload with a couple of
+// example eager transformations included in the request.
+const signuploadform = async (req, res) => {
+  const timestamp = Math.round((new Date).getTime()/1000);
+
+  const signature = cloudinary.utils.api_sign_request({
+    timestamp: timestamp,
+    // eager: 'c_pad,h_300,w_400|c_crop,h_200,w_260',
+    folder: 'poetry'
+  }, CLOUDINARY_SECRET);
+  console.log(signature)
+  res.status(200).json({ timestamp, signature, cloudname: CLOUDINARY_NAME, apikey: CLOUDINARY_KEY })
+}
+
+
 const addPoetry = async (req, res) => {
   const { name, body, coverUrl, audioUrl, about, tag, pages } = req.body;
 
@@ -79,10 +96,12 @@ const updatePoetryById = async (req, res) => {
   res.status(200).json(result);
 };
 
-const getUploadUrl = async (req, res) => {
-  const uploadUrl = await cloudinary.uploader.upload_url();
-  res.json(uploadUrl);
-};
+// const getUploadUrl = async (req, res) => {
+//   const uploadUrl = await cloudinary.uploader.upload_url();
+//   res.json(uploadUrl);
+// };
+
+
 // const ratePoetry = async (req, res) => {
 //   const { poetryId, userRating } = req.body;
 //   const findPoetry = await Poetry.findOne({ poetryId });
@@ -110,7 +129,7 @@ const getUploadUrl = async (req, res) => {
 
 export default {
   getPoetry: ctrlWrapper(getPoetry),
-  getUploadUrl: ctrlWrapper(getUploadUrl),
+  getUploadUrl: ctrlWrapper(signuploadform),
   getPoetryById: ctrlWrapper(getPoetryById),
   deletePoetry: ctrlWrapper(deletePoetry),
   addPoetry: ctrlWrapper(addPoetry),

@@ -18,10 +18,10 @@ const poetrySchema = new Schema({
     type: String,
     required: [true, "Name is required"],
   },
-  body: {
-    type: String,
-    required: [true, "Body is required"],
-  },
+  // body: {
+  //   type: String,
+  //   required: [true, "Body is required"],
+  // },
   poetryId: {
     type: String,
     required: true,

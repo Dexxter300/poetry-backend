@@ -7,11 +7,11 @@ import { validateBody, authenticate } from "../../middlewares/index.js";
 const router = express.Router();
 // const upload = multer({ dest: "uploads/" });
 
-router.post("/get-upload-url", authenticate, ctrl.getUploadUrl); // add auth middleware
+router.get("/get-upload-url", ctrl.getUploadUrl); // add auth middleware
 
 router.get("/", ctrl.getPoetry);
 
-router.post("/", authenticate, ctrl.addPoetry);
+router.post("/", ctrl.addPoetry);
 
 router.patch("/:id", authenticate, ctrl.updatePoetryById);
 

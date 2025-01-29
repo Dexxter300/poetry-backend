@@ -7,6 +7,9 @@ import { validateBody, authenticate } from "../../middlewares/index.js";
 
 const router = express.Router();
 
-router.get("/get-visit-stats/:monthNumber", authenticate, ctrl.getVisitStats);
+// router.get("/get-visit-stats/:monthNumber", authenticate, ctrl.getVisitStats);
+router.get("/get-visit-stats/:monthNumber", ctrl.getVisitStats);
+
+router.post("/send-visit", ctrl.processVisit)
 
 export default router;
