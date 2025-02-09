@@ -4,7 +4,7 @@ import { validateBody, authenticate } from "../../middlewares/index.js";
 
 const router = express.Router();
 
-router.get("/posts", ctrl.getPosts);
+router.get("/", ctrl.getPosts);
 
 router.get("/post/:postId", ctrl.getPostById);
 

@@ -17,7 +17,7 @@ cloudinary.config({
 // Server-side function used to sign an upload with a couple of
 // example eager transformations included in the request.
 const signuploadform = async (req, res) => {
-  const timestamp = Math.round((new Date).getTime()/1000);
+  const timestamp = Math.round((new Date).getTime() / 1000);
 
   const signature = cloudinary.utils.api_sign_request({
     timestamp: timestamp,
@@ -50,7 +50,10 @@ const addPoetry = async (req, res) => {
 };
 
 const getPoetry = async (req, res) => {
-  const { page, limit } = req.params;
+  let { page, limit } = req.query;
+
+  page = parseInt(page)
+  limit = parseInt(limit)
 
   const result = await Poetry.aggregate([
     { $sort: { date: -1 } },

@@ -3,8 +3,23 @@ import { HttpError, ctrlWrapper } from "../helpers/index.js";
 import { customAlphabet } from "nanoid";
 
 const getPosts = async (req, res) => {
-  const result = await Post.find();
-  res.status(200).json(result);
+  // const result = await Post.find();
+  // res.status(200).json(result);
+
+  let { page, limit } = req.query;
+
+  page = parseInt(page)
+  limit = parseInt(limit)
+
+  const result = await Post.aggregate([
+    { $sort: { date: -1 } },
+    { $skip: page * limit },
+    { $limit: limit },
+  ]);
+
+  const pageCount = await Post.countDocuments()
+  console.log(pageCount)
+  res.json(result);
   // maybe add some filters and pagination and return filter
 };
 

@@ -9,7 +9,7 @@ import { User } from "../models/user.js";
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email in use");
@@ -32,7 +32,7 @@ const register = async (req, res) => {
   //     },
   //   ];
   const newUser = await User.create({
-    ...req.body,
+    email,
     password: hashPass,
     // verificationCode,
   });
@@ -42,7 +42,7 @@ const register = async (req, res) => {
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "30d" });
 
-  await User.findOneAndUpdate(newUser._id, { token });
+  const tokenUpdate = await User.findOneAndUpdate(newUser._id, { token });
 
   res.status(201).json({
     token,
@@ -133,17 +133,17 @@ const userRefresh = async (req, res) => {
   try {
     const user = await User.findById(id).exec();
 
-    res.status(200).send(user);
+    res.status(200).send({ email: user.email, token: user.token });
   } catch (err) {
     next(err);
   }
 };
 
 export default {
-  //   register: ctrlWrapper(register),
+  register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   //   updateSubscription: ctrlWrapper(updateSubscription),
   logout: ctrlWrapper(logout),
-
+  userRefresh: ctrlWrapper(userRefresh),
   forgotPassword: ctrlWrapper(forgotPassword),
 };
