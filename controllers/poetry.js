@@ -60,18 +60,26 @@ const getPoetry = async (req, res) => {
     { $skip: page * limit },
     { $limit: limit },
   ]);
-  res.json(result);
+
+  const totalItems = await Poetry.countDocuments()
+  res.json({
+    poetry: result,
+    page,
+    limit,
+    totalPages: Math.ceil(totalItems / limit),
+    totalItems,
+  });
 };
 
 const getPoetryById = async (req, res) => {
-  const { poetryId } = req.params;
-  const result = await Poetry.findOne({ poetryId });
+  const { id } = req.params;
+  const result = await Poetry.findOne({ poetryId: id });
 
   if (!result) {
     throw HttpError(404, "sosi");
   }
 
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const deletePoetry = async (req, res) => {
@@ -90,7 +98,7 @@ const deletePoetry = async (req, res) => {
 const updatePoetryById = async (req, res) => {
   const { id } = req.params;
 
-  const result = await Food.findByIdAndUpdate(id, req.body, {
+  const result = await Poetry.findOneAndUpdate({poetryId: id}, req.body, {
     new: true,
   });
   if (!result) {

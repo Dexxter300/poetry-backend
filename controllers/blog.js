@@ -17,9 +17,14 @@ const getPosts = async (req, res) => {
     { $limit: limit },
   ]);
 
-  const pageCount = await Post.countDocuments()
-  console.log(pageCount)
-  res.json(result);
+  const totalItems = await Post.countDocuments()
+  res.json({
+    posts: result,
+    page,
+    limit,
+    totalPages: Math.ceil(totalItems / limit),
+    totalItems,
+  });
   // maybe add some filters and pagination and return filter
 };
 

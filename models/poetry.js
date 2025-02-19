@@ -40,7 +40,10 @@ const poetrySchema = new Schema({
     type: String,
     enum: typesOfContent,
   },
-  pages: [pageSchema],
+  // pages: [pageSchema],
+  body: {
+    type: String
+  },
   about: {
     type: String,
   },
